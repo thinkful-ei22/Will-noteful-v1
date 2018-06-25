@@ -27,24 +27,32 @@ const app = express();
 
 
 */
+app.use(express.static('public'));
 
 app.get('/api/notes', (req, res) => {
-    res.json(data);
-  });
-  app.get('/api/notes/:id', (req, res) => {
-    res.json(data[req.params.id]);
-  });
+  console.log('Hello');
+  const {searchTerm} = req.query;
+  if(searchTerm){
+    const found = data.filter(item => item.title.includes(searchTerm));
+    return res.json(found);
+  }
+  else{     
+    return res.json(data);
+  }
+});
+  
 
-  app.get('/api/notes/:id', (req, res) => {
-    const id =req.params.id;
-   const dataNew = data.find(item => item.id === Number(id));
-   return res.json(dataNew);
+app.get('/api/notes/:id', (req, res) => {
 
-  });
+  const id =req.params.id;
+  const dataNew = data.find(item => item.id === Number(id));
+  return res.json(dataNew);
+
+});
 
 
 
- // app.post('/', (req, res) => res.send(findNote(req.noteId)));
+// app.post('/', (req, res) => res.send(findNote(req.noteId)));
 
 app.listen(8080, function () {
   console.info(`Server listening on ${this.address().port}`);
