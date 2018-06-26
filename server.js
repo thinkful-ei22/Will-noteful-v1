@@ -12,7 +12,9 @@ const data = require('./db/notes');
 
 const app = express();
 const { PORT } = require('./config');
+const {requestLogger} = require('./logger');
 
+app.use(requestLogger);
 // ADD STATIC SERVER HERE
 
 /*function findNote(body) {
