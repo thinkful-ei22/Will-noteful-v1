@@ -14,6 +14,10 @@ const app = express();
 
 const { PORT } = require('./config');
 
+const {requestLogger} = require('./logger');
+
+app.use(requestLogger);
+
 // ADD STATIC SERVER HERE
 
 /*function findNote(body) {
@@ -29,7 +33,13 @@ const { PORT } = require('./config');
 
 
 */
+
+
 app.use(express.static('public'));
+
+console.log('Working');
+
+//console.log(greeting); //=> "Hello World!"
 
 app.get('/api/notes', (req, res) => {
   console.log('Hello');
