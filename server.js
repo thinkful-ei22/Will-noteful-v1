@@ -12,6 +12,8 @@ const data = require('./db/notes');
 
 const app = express();
 
+const { PORT } = require('./config');
+
 // ADD STATIC SERVER HERE
 
 /*function findNote(body) {
@@ -36,15 +38,16 @@ app.get('/api/notes', (req, res) => {
     const found = data.filter(item => item.title.includes(searchTerm));
     return res.json(found);
   }
-  else{     
-    return res.json(data);
-  }
+  //else{     
+  return res.json(data);
+  
 });
   
 
 app.get('/api/notes/:id', (req, res) => {
 
   const id =req.params.id;
+  //comes back as a string!
   const dataNew = data.find(item => item.id === Number(id));
   return res.json(dataNew);
 
@@ -54,7 +57,7 @@ app.get('/api/notes/:id', (req, res) => {
 
 // app.post('/', (req, res) => res.send(findNote(req.noteId)));
 
-app.listen(8080, function () {
+app.listen(PORT, function () {
   console.info(`Server listening on ${this.address().port}`);
 }).on('error', err => {
   console.error(err);
