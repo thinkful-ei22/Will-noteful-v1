@@ -9,6 +9,8 @@
 const express = require('express');
 
 const data = require('./db/notes');
+const simDB = require('./db/simDB');  // <<== add this
+const notes = simDB.initialize(data); // <<== and this
 
 const app = express();
 const { PORT } = require('./config');
@@ -47,24 +49,31 @@ app.get('/boom', (req, res, next) => {
   throw new Error('Boom!!');
 });
 
-app.get('/api/notes', (req, res) => {
-  console.log('Hello');
-  const {searchTerm} = req.query;
-  if(searchTerm){
-    const found = data.filter(item => item.title.includes(searchTerm));
-    return res.json(found);
-  }
-  else{     
-    return res.json(data);
-  }
+app.get('/api/notes', (req, res, next) => {
+  const { searchTerm } = req.query;
+
+  notes.filter(searchTerm, (err, list) => {
+    if (err) {
+      return next(err); // goes to error handler
+    }
+    res.json(list); // responds with filtered array
+  });
 });
   
 
 app.get('/api/notes/:id', (req, res) => {
-
-  const id =req.params.id;
-  const dataNew = data.find(item => item.id === Number(id));
-  return res.json(dataNew);
+const id = req.params.id;
+notes.find(id, (err, item) =>{
+  if(err) {
+    console.error(err);
+  }
+  if(item) {
+    res.json(item);
+  }
+  else{
+    console.log('not found');
+  }
+});
 
 });
 
@@ -85,6 +94,8 @@ app.use(function (err, req, res, next) {
     error: err
   });
 });
+
+
 // app.post('/', (req, res) => res.send(findNote(req.noteId)));
 
 app.listen(PORT, function () {
