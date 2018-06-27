@@ -6,8 +6,11 @@
 //console.log('Hello Noteful!');
 
 // INSERT EXPRESS APP CODE HERE...
-const express = require('express');
 
+const express = require('express');
+const morgan = require('morgan');
+
+const notesRouter = require('./notes/notesRouter');
 const data = require('./db/notes');
 const simDB = require('./db/simDB');  // <<== add this
 const notes = simDB.initialize(data); // <<== and this
@@ -18,15 +21,18 @@ const {requestLogger} = require('./logger');
 
 app.use(requestLogger);
 
-const morgan = require('morgan');
+
+
 app.use(morgan('dev'));
-
-const notesRouter = require('./notes/notesRouter');
-
-app.use('/api', notesRouter);
 
 app.use(express.static('public'));
 app.use(express.json());
+
+
+
+app.use('/api', notesRouter);
+
+
 
 
 app.listen(PORT, function () {
