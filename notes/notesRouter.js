@@ -43,6 +43,23 @@ const notes = simDB.initialize(data); // <<== and this
     });
   });
 
+router.delete('/notes/:id', (req, res, next) => {
+  const id = req.params.id; //same as const {id} = req.params
+
+      notes.delete( id, err => {
+        if (err) {
+         return next(err);
+           }
+        
+        else {
+         res.sendStatus(204);
+  }
+
+});
+
+});
+
+
 
   router.post('/notes', (req, res, next) => {
     
@@ -112,18 +129,6 @@ const notes = simDB.initialize(data); // <<== and this
 module.exports = router;
  
  
-  router.use(function (req, res, next) {
-    let err = new Error('Not Found');
-    err.status = 404;
-    res.status(404).json({ message: 'Not Found' });
-  });
-  
-  router.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.json({
-      message: err.message,
-      error: err
-    });
-  });
+ 
   
   
