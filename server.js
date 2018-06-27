@@ -17,6 +17,9 @@ const { PORT } = require('./config');
 const {requestLogger} = require('./logger');
 
 app.use(requestLogger);
+
+const morgan = require('morgan');
+app.use(morgan('dev'));
 // ADD STATIC SERVER HERE
 
 /*function findNote(body) {
